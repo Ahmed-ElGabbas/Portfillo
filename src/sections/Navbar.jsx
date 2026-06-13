@@ -2,8 +2,9 @@ import { motion } from 'framer-motion';
 import { Menu, Sun, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-export default function Navbar() {
-    const [dark, setDark] = useState(false);
+export default function Navbar({ darkMode, setDarkMode }) {
+    const dark = darkMode;
+    const setDark = setDarkMode;
     const [activeSection, setActiveSection] = useState('home');
 
     const fredokaFont = { fontFamily: "'Fredoka', sans-serif" };
@@ -57,7 +58,7 @@ export default function Navbar() {
                         alt="Logo Icon"
                         className="w-10 h-10 object-contain"
                     />
-                    <span className="text-white">Ahmed ElGabbas</span>
+                    <span className="dark:text-white text-slate-900">Ahmed ElGabbas</span>
                 </a>
 
                 {/* Links */}

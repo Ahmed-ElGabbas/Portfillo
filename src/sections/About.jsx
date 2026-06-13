@@ -7,7 +7,47 @@ const FONT_SIZES = {
     paragraph: '1.275rem', // الفقرات
 };
 
-export default function About() {
+/* ── StarField — 80 stars, 3 size tiers, purple in light mode, cyan/white in dark ── */
+const StarField = ({ darkMode = true }) => {
+    const stars = Array.from({ length: 80 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() > 0.9 ? 4 : Math.random() > 0.7 ? 2.5 : 1.5,
+        duration: 2 + Math.random() * 3,
+        delay: Math.random() * 3,
+        color: darkMode
+            ? (i % 3 === 0 ? 'rgba(34,211,238,0.8)' : 'white')
+            : (i % 2 === 0 ? 'rgba(124,58,237,0.9)' : 'rgba(99,102,241,0.7)'),
+    }));
+
+    return (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+            {stars.map(star => (
+                <motion.div
+                    key={star.id}
+                    className="absolute rounded-full"
+                    style={{
+                        left: `${star.x}%`,
+                        top: `${star.y}%`,
+                        width: star.size,
+                        height: star.size,
+                        background: star.color,
+                    }}
+                    animate={{ opacity: [0.15, 1, 0.15], scale: [1, 1.5, 1] }}
+                    transition={{
+                        duration: star.duration,
+                        repeat: Infinity,
+                        delay: star.delay,
+                        ease: 'easeInOut',
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
+export default function About({ darkMode }) {
     return (
         <>
             {/* Fredoka Font Import */}
@@ -18,32 +58,50 @@ export default function About() {
                 }
             `}</style>
 
-            <section id="about" className="py-24 px-6">
+            <section id="about" className="py-24 px-6 relative overflow-hidden">
+                <StarField darkMode={darkMode} />
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="container mx-auto max-w-4xl"
+                    className="container mx-auto max-w-4xl relative"
+                    style={{ zIndex: 2 }}
                 >
                     {/* Header - Centered with underline */}
                     <div className="flex flex-col items-center mb-12">
                         <h2
-                            className="font-bold text-white mb-3"
+                            className="font-bold dark:text-white text-slate-900 mb-3"
                             style={{ fontSize: FONT_SIZES.title }}
                         >
                             About Me
                         </h2>
                         <span
-                            className="font-medium mb-4"
+                            className="font-medium mb-2"
                             style={{ color: '#0d7377', fontSize: FONT_SIZES.subtitle }}
                         >
                             My introduction
                         </span>
-                        <div className="h-0.5 w-16 bg-white/40 rounded-full"></div>
+                        <motion.div
+                            className="mx-auto mt-2 rounded-full"
+                            style={{
+                                height: '2px',
+                                width: '60px',
+                                background: 'linear-gradient(to right, transparent, #22d3ee, transparent)',
+                            }}
+                            animate={{
+                                scaleX: [0.6, 1.3, 0.6],
+                                opacity: [0.4, 1, 0.4],
+                            }}
+                            transition={{
+                                duration: 2.5,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                            }}
+                        />
                     </div>
 
                     {/* Paragraphs */}
-                    <div className="text-gray-300 space-y-6">
+                    <div className="dark:text-gray-300 text-slate-700 space-y-6">
                         <p style={{ lineHeight: '1.9', fontSize: FONT_SIZES.paragraph }}>
                             Hi, I'm Ahmed Mahmoud Ahmed Elgabbas, a Computer Science and Artificial Intelligence student at Helwan National University specializing in Robotics Software Engineering. I am a passionate Software and Mobile Application Developer with a strong foundation in programming, problem-solving, and software architecture.
                         </p>
@@ -61,29 +119,10 @@ export default function About() {
                             href="/Ahmed-Mahmoud-Ahmed-Elgabbas-FlowCV-Resume-20241202.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border-2 border-[#0d7377] dark:text-white text-[#0d7377] hover:bg-[#0d7377] hover:text-white transition-all duration-300 cursor-pointer text-base font-medium hover:shadow-[0_0_20px_rgba(13,115,119,0.6)]"
                             style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '12px 32px',
-                                borderRadius: '8px',
-                                border: '1.5px solid #0d7377',
-                                color: '#fff',
-                                backgroundColor: 'transparent',
-                                fontSize: '1rem',
                                 fontFamily: 'Fredoka, sans-serif',
-                                fontWeight: '500',
                                 textDecoration: 'none',
-                                transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
-                                cursor: 'pointer',
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.backgroundColor = '#0d7377';
-                                e.currentTarget.style.boxShadow = '0 0 20px rgba(13,115,119,0.6)';
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.backgroundColor = 'transparent';
-                                e.currentTarget.style.boxShadow = 'none';
                             }}
                         >
                             View CV

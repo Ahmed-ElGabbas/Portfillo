@@ -35,9 +35,49 @@ const TypewriterText = ({ words = ['React Developer', 'UI Designer', 'Problem So
     return <span className="text-cyan-400">{displayText}</span>;
 };
 
+/* ── StarField — 80 stars, 3 size tiers, purple in light mode, cyan/white in dark ── */
+const StarField = ({ darkMode = true }) => {
+    const stars = Array.from({ length: 80 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() > 0.9 ? 4 : Math.random() > 0.7 ? 2.5 : 1.5,
+        duration: 2 + Math.random() * 3,
+        delay: Math.random() * 3,
+        color: darkMode
+            ? (i % 3 === 0 ? 'rgba(34,211,238,0.8)' : 'white')
+            : (i % 2 === 0 ? 'rgba(124,58,237,0.9)' : 'rgba(99,102,241,0.7)'),
+    }));
+
+    return (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+            {stars.map(star => (
+                <motion.div
+                    key={star.id}
+                    className="absolute rounded-full"
+                    style={{
+                        left: `${star.x}%`,
+                        top: `${star.y}%`,
+                        width: star.size,
+                        height: star.size,
+                        background: star.color,
+                    }}
+                    animate={{ opacity: [0.15, 1, 0.15], scale: [1, 1.5, 1] }}
+                    transition={{
+                        duration: star.duration,
+                        repeat: Infinity,
+                        delay: star.delay,
+                        ease: 'easeInOut',
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
 const PDF_B64 = "YOUR_PDF_B64_HERE";
 
-export default function Hero() {
+export default function Hero({ darkMode }) {
     const roles = ['Full Stack Developer', 'Mobile Application Developer', 'Competitive Programmer'];
 
     const orbitingIcons = [
@@ -114,7 +154,8 @@ export default function Hero() {
     }));
 
     return (
-        <section id="home" className="min-h-screen flex items-center px-6 pt-20 relative overflow-hidden bg-slate-900" style={fredokaFont}>
+        <section id="home" className="min-h-screen flex items-center px-6 pt-20 relative overflow-hidden dark:bg-slate-900 bg-white" style={fredokaFont}>
+            <StarField darkMode={darkMode} />
             <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
 
             <div className="container mx-auto max-w-7xl relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -126,7 +167,7 @@ export default function Hero() {
                         transition={{ duration: 0.6 }}
                         className="mb-8 inline-block"
                     >
-                        <div className="flex items-center gap-2 bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 backdrop-blur-sm">
+                        <div className="flex items-center gap-2 dark:bg-slate-800/50 bg-slate-100/50 border dark:border-slate-700 border-slate-200 rounded-full px-4 py-2 backdrop-blur-sm">
                             <span className="text-lg">👋</span>
                             <span className="text-cyan-400 text-sm" style={fredokaFont}>Hello, I'm Gabbas</span>
                         </div>
@@ -136,7 +177,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.8 }}
-                        className="text-5xl font-bold mb-6 tracking-tight text-white"
+                        className="text-5xl font-bold mb-6 tracking-tight dark:text-white text-slate-900"
                         style={fredokaFont}
                     >
                         Ahmed Mahmoud ElGabbas
@@ -146,7 +187,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
-                        className="text-4xl font-bold mb-8 text-gray-300 whitespace-nowrap"
+                        className="text-4xl font-bold mb-2 dark:text-gray-300 text-slate-700 whitespace-nowrap"
                         style={fredokaFont}
                     >
                         I'm a <TypewriterText words={roles} />
@@ -159,11 +200,30 @@ export default function Hero() {
                         </motion.span>
                     </motion.h2>
 
+                    {/* Animated underline under role text */}
+                    <motion.div
+                        className="mt-2 mb-6 rounded-full"
+                        style={{
+                            height: '2px',
+                            width: '60px',
+                            background: 'linear-gradient(to right, transparent, #22d3ee, transparent)',
+                        }}
+                        animate={{
+                            scaleX: [0.6, 1.3, 0.6],
+                            opacity: [0.4, 1, 0.4],
+                        }}
+                        transition={{
+                            duration: 2.5,
+                            repeat: Infinity,
+                            ease: 'easeInOut',
+                        }}
+                    />
+
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.8 }}
-                        className="text-gray-400 max-w-xl mb-8 leading-relaxed text-lg"
+                        className="dark:text-gray-400 text-slate-600 max-w-xl mb-8 leading-relaxed text-lg"
                         style={fredokaFont}
                     >
                         I'm a passionate full-stack engineer specializing in building exceptional digital experiences across web and mobile platforms. Experienced in competitive programming and crafting human-centered, accessible products at the intersection of design and code.
@@ -217,7 +277,7 @@ export default function Hero() {
                                 rel="noopener noreferrer"
                                 whileHover={{ scale: 1.2, y: -5 }}
                                 whileTap={{ scale: 0.9 }}
-                                className={`p-3 rounded-full bg-slate-800 border border-slate-700 text-gray-400 transition-colors ${color}`}
+                                className={`p-3 rounded-full dark:bg-slate-800 bg-slate-100 border dark:border-slate-700 border-slate-200 dark:text-gray-400 text-slate-600 transition-colors ${color}`}
                                 aria-label={label}
                             >
                                 <Icon size={24} />
@@ -275,7 +335,7 @@ export default function Hero() {
                                             href={item.link || '#'}
                                             target={item.link ? '_blank' : '_self'}
                                             rel={item.link ? 'noopener noreferrer' : ''}
-                                            className="absolute w-9 h-9 rounded-full bg-slate-800/90 border border-cyan-400/60 flex items-center justify-center cursor-pointer z-20"
+                                            className="absolute w-9 h-9 rounded-full dark:bg-slate-800/90 bg-slate-100/90 border border-cyan-400/60 flex items-center justify-center cursor-pointer z-20"
                                             style={{
                                                 left: `calc(50% + ${x}px)`,
                                                 top: `calc(50% + ${y}px)`,
@@ -333,7 +393,7 @@ export default function Hero() {
 
                         {/* Fixed button under the frame */}
                         <motion.div
-                            className="mt-12 flex items-center gap-2 bg-slate-800/80 border border-cyan-400/30 rounded-full px-5 py-2.5 backdrop-blur-sm"
+                            className="mt-12 flex items-center gap-2 dark:bg-slate-800/80 bg-slate-100/80 border border-cyan-400/30 rounded-full px-5 py-2.5 backdrop-blur-sm"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 1, duration: 0.6 }}
@@ -368,7 +428,7 @@ export default function Hero() {
                 transition={{ duration: 2, repeat: Infinity }}
                 onClick={handleScroll}
             >
-                <p className="text-gray-400 text-sm mb-2" style={fredokaFont}>Scroll to explore</p>
+                <p className="dark:text-gray-400 text-slate-600 text-sm mb-2" style={fredokaFont}>Scroll to explore</p>
                 <svg className="w-6 h-6 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>

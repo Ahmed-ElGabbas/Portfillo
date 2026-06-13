@@ -1,0 +1,161 @@
+# Ahmed ElGabbas Portfolio
+
+## Overview
+
+A modern and responsive personal portfolio website built using React, Vite, Tailwind CSS, and Framer Motion. The portfolio showcases my skills, projects, certifications, leadership experience, and contact information in a professional and interactive design.
+
+## Features
+
+* Responsive design for all devices
+* Modern UI with smooth animations
+* Interactive skills section
+* Certificates showcase with previews
+* Project portfolio section
+* Downloadable CV
+* Contact form integration using Formspree
+* Optimized performance with Vite
+
+## Technologies Used
+
+### Frontend
+
+* React.js
+* Vite
+* Tailwind CSS
+* Framer Motion
+
+### Languages
+
+* JavaScript
+* HTML5
+* CSS3
+
+### Tools
+
+* Git
+* GitHub
+* VS Code
+
+## About Me
+
+Ahmed Mahmoud Ahmed ElGabbas is a Computer Science and Artificial Intelligence student at Helwan National University, specializing in Robotics Software Engineering.
+
+Passionate Software and Mobile Application Developer with experience in:
+
+* C
+* C++
+* C#
+* Python
+* Java
+* Go
+* Flutter
+* React
+* Node.js
+* ASP.NET Core
+* Databases and SQL
+
+In addition to technical expertise, Ahmed actively contributes to student activities and leadership roles, including:
+
+* Member of HR Committee at HNU-FCSIT ICPC Community
+* Head of Sports Committee at HNU-FCSIT Student Union
+
+## Skills
+
+### Programming Languages
+
+* C
+* C++
+* C#
+* Python
+* Java
+* Go
+* SQL
+
+### Mobile Development
+
+* Flutter
+* Dart
+* Firebase
+* Android
+* iOS
+
+### Frontend Development
+
+* HTML5
+* CSS3
+* JavaScript
+* TypeScript
+* React
+* Next.js
+* Tailwind CSS
+* Bootstrap
+* SASS
+* Redux
+* Framer Motion
+
+### Backend Development
+
+* Node.js
+* Express.js
+* ASP.NET Core
+* Django
+* REST APIs
+
+### Databases
+
+* MySQL
+* PostgreSQL
+* SQL Server
+* SQLite
+* MongoDB
+
+## Certifications
+
+* ICPC ECPC Qualifications Certificate
+* Database Fundamentals Certificate (ITI)
+* Introduction to Software Testing Certificate (ITI)
+* Software Engineer Intern Certificate (HackerRank)
+* Software Engineer Certificate (HackerRank)
+
+## Installation
+
+```bash
+git clone <repository-url>
+cd portfolio
+npm install
+npm run dev
+```
+
+## Build for Production
+
+```bash
+npm run build
+```
+
+## Project Structure
+
+```text
+src/
+├── assets/
+├── components/
+├── sections/
+│   ├── Hero
+│   ├── About
+│   ├── Skills
+│   ├── Projects
+│   ├── Certificates
+│   ├── Contact
+│   └── Footer
+├── App.jsx
+└── main.jsx
+```
+
+## Contact
+
+Email: [ahmed.mahmoud.elgabbas@gmail.com](mailto:ahmed.mahmoud.elgabbas@gmail.com)
+
+Phone: +20 111 702 4500
+
+## License
+
+This project is created for personal portfolio and professional presentation purposes.
