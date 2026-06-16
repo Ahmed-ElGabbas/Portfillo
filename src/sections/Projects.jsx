@@ -1,5 +1,6 @@
+import { useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, Terminal, Database, BookOpen, Layers, CheckCircle } from 'lucide-react';
+import { ExternalLink, Github, Terminal, Database, BookOpen, Layers, CheckCircle, Clock } from 'lucide-react';
 import projects from '../data/projects';
 
 // High-fidelity interactive UI mockups for when image is null
@@ -295,6 +296,19 @@ function MockupPreview({ projectId }) {
 }
 
 export default function Projects() {
+    // Spotlight coordinates state for each card to follow cursor
+    const [spotlights, setSpotlights] = useState({});
+
+    const handleMouseMove = (id, e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        setSpotlights(prev => ({
+            ...prev,
+            [id]: { x, y }
+        }));
+    };
+
     const handleTagClick = (tag) => {
         const skillsSection = document.getElementById('skills');
         if (!skillsSection) return;
@@ -361,6 +375,8 @@ export default function Projects() {
                 {/* Projects Stack */}
                 <div className="space-y-36">
                     {projects.map((p, i) => {
+                        const isOdd = i % 2 === 0; // 0-indexed: 1st (0) is odd, 2nd (1) is even
+
                         return (
                             <motion.div
                                 key={p.title}
@@ -368,10 +384,31 @@ export default function Projects() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: '-100px' }}
                                 transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-                                className="flex flex-col-reverse lg:grid lg:grid-cols-12 lg:gap-12 lg:items-center relative"
+                                onMouseMove={(e) => handleMouseMove(p.id, e)}
+                                className="flex flex-col-reverse lg:grid lg:grid-cols-12 lg:gap-12 lg:items-center relative group"
                             >
-                                {/* LEFT SIDE: Text Contents */}
-                                <div className="w-full lg:col-span-7 flex flex-col items-start z-10 mt-8 lg:mt-0">
+                                {/* Spotlight overlay tracking cursor on hover */}
+                                {spotlights[p.id] && (
+                                    <div
+                                        className="absolute pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                                        style={{
+                                            width: '600px',
+                                            height: '600px',
+                                            background: `radial-gradient(circle 300px at ${spotlights[p.id].x}px ${spotlights[p.id].y}px, rgba(168,85,247,0.045), transparent 80%)`,
+                                            left: 0,
+                                            top: 0,
+                                            zIndex: 0,
+                                        }}
+                                    />
+                                )}
+
+                                {/* LEFT/RIGHT SIDE: Text Contents */}
+                                <div 
+                                    className={`
+                                        w-full lg:col-span-7 flex flex-col z-10 mt-8 lg:mt-0
+                                        ${isOdd ? 'items-start text-left lg:order-1' : 'items-start text-left lg:items-end lg:text-right lg:order-2'}
+                                    `}
+                                >
                                     {/* Small Featured label */}
                                     <span className="text-purple-400 text-xs md:text-sm uppercase tracking-[0.2em] font-semibold mb-2">
                                         Featured Project
@@ -386,7 +423,13 @@ export default function Projects() {
                                     <motion.div
                                         whileHover={{ y: -4 }}
                                         transition={{ duration: 0.3 }}
-                                        className="w-full bg-[#0c051a]/60 backdrop-blur-xl border border-purple-500/20 rounded-2xl p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5),_0_0_30px_rgba(168,85,247,0.03)] hover:border-purple-500/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.6),_0_0_40px_rgba(168,85,247,0.08)] transition-all duration-300 lg:-mr-16 lg:relative lg:z-20 text-left pointer-events-auto"
+                                        className={`
+                                            w-full bg-[#0c051a]/60 backdrop-blur-xl border border-purple-500/20 rounded-2xl p-6 md:p-8 
+                                            shadow-[0_20px_50px_rgba(0,0,0,0.5),_0_0_30px_rgba(168,85,247,0.03)] 
+                                            hover:border-purple-500/40 hover:shadow-[0_25px_60px_rgba(0,0,0,0.6),_0_0_40px_rgba(168,85,247,0.08)] 
+                                            transition-all duration-300 lg:relative lg:z-20 text-left pointer-events-auto
+                                            ${isOdd ? 'lg:-mr-16' : 'lg:-ml-16'}
+                                        `}
                                     >
                                         <p className="text-sm md:text-base text-purple-200/90 leading-relaxed font-normal">
                                             {p.desc}
@@ -394,7 +437,12 @@ export default function Projects() {
                                     </motion.div>
 
                                     {/* Technology Tags */}
-                                    <div className="flex flex-wrap gap-2.5 mt-6 lg:relative lg:z-20">
+                                    <div 
+                                        className={`
+                                            flex flex-wrap gap-2.5 mt-6 lg:relative lg:z-20
+                                            ${isOdd ? '' : 'lg:justify-end'}
+                                        `}
+                                    >
                                         {p.tags.map(tag => (
                                             <button
                                                 key={tag}
@@ -407,7 +455,12 @@ export default function Projects() {
                                     </div>
 
                                     {/* Buttons */}
-                                    <div className="flex flex-wrap items-center gap-4 mt-8 lg:relative lg:z-20">
+                                    <div 
+                                        className={`
+                                            flex flex-wrap items-center gap-4 mt-8 lg:relative lg:z-20
+                                            ${isOdd ? '' : 'lg:justify-end'}
+                                        `}
+                                    >
                                         {/* GitHub Button */}
                                         <a
                                             href={p.githubLink || '#'}
@@ -433,11 +486,21 @@ export default function Projects() {
                                                 <CheckCircle size={12} /> {p.status}
                                             </span>
                                         )}
+                                        {p.status === 'In Progress' && (
+                                            <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                                                <Clock size={12} /> {p.status}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
 
-                                {/* RIGHT SIDE: Image Preview and Futuristic Frame */}
-                                <div className="w-full lg:col-span-5 relative flex justify-center lg:justify-end">
+                                {/* LEFT/RIGHT SIDE: Image Preview and Futuristic Frame */}
+                                <div 
+                                    className={`
+                                        w-full lg:col-span-5 relative flex justify-center
+                                        ${isOdd ? 'lg:justify-end lg:order-2' : 'lg:justify-start lg:order-1'}
+                                    `}
+                                >
                                     {/* Large radial purple glow behind the project image */}
                                     <div className="absolute -inset-10 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.25),transparent_65%)] blur-2xl pointer-events-none" style={{ zIndex: 0 }} />
 
